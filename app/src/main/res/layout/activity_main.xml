@@ -9,8 +9,10 @@
     tools:context=".MainActivity">
 
     <android.support.constraint.ConstraintLayout
+        android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingBottom="64dp">
 
         <Button
             android:id="@+id/button_background"
@@ -28,7 +30,7 @@
             app:layout_constraintDimensionRatio="H,1:1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/button_icon"
@@ -56,6 +58,69 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/button_background" />
+
+        <TextView
+            android:id="@+id/volumeText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="8dp"
+            android:text="Volume"
+            android:textAppearance="@android:style/TextAppearance.Material.Large"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/arrow" />
+
+        <Button
+            android:id="@+id/volumeDown"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="32dp"
+            android:background="@drawable/ic_circle"
+            android:clickable="true"
+            android:elevation="6dp"
+            android:focusable="true"
+            app:layout_constraintBottom_toBottomOf="@+id/volumeText"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/volumeText" />
+
+        <TextView
+            android:id="@+id/volumeDownText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:elevation="7dp"
+            android:text="-"
+            android:textAppearance="@android:style/TextAppearance.Material.Large"
+            app:layout_constraintBottom_toBottomOf="@+id/volumeDown"
+            app:layout_constraintEnd_toEndOf="@+id/volumeDown"
+            app:layout_constraintStart_toStartOf="@+id/volumeDown"
+            app:layout_constraintTop_toTopOf="@+id/volumeDown" />
+
+        <Button
+            android:id="@+id/volumeUp"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginEnd="32dp"
+            android:background="@drawable/ic_circle"
+            android:clickable="true"
+            android:elevation="6dp"
+            android:focusable="true"
+            app:layout_constraintBottom_toBottomOf="@+id/volumeText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/volumeText" />
+
+        <TextView
+            android:id="@+id/volumeUpText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:elevation="7dp"
+            android:text="+"
+            android:textAppearance="@android:style/TextAppearance.Material.Large"
+            app:layout_constraintBottom_toBottomOf="@+id/volumeUp"
+            app:layout_constraintEnd_toEndOf="@+id/volumeUp"
+            app:layout_constraintStart_toStartOf="@+id/volumeUp"
+            app:layout_constraintTop_toTopOf="@+id/volumeUp" />
 
     </android.support.constraint.ConstraintLayout>
     </ScrollView>
