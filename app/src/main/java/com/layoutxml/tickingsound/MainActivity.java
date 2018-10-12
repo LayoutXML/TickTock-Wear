@@ -146,16 +146,17 @@ public class MainActivity extends WearableActivity {
     }
 
     private void updateVolumeText() {
-        volumeText.setText("Volume: "+(currentVolume-1)+"/"+(maxVolume-1));
+        String current = (currentVolume-1<10) ? "0"+(currentVolume-1) : (currentVolume-1)+"";
+        volumeText.setText("Volume: "+current+"/"+(maxVolume-1));
         if (currentVolume.equals(maxVolume)) {
-            volumeUp.setBackgroundColor(Color.parseColor("#999999"));
-            volumeDown.setBackgroundColor(Color.parseColor("#03A9F4"));
+            volumeUp.setBackgroundResource(R.drawable.ic_circle_grayscale);
+            volumeDown.setBackgroundResource(R.drawable.ic_circle);
         } else if (currentVolume.equals(1)) {
-            volumeUp.setBackgroundColor(Color.parseColor("#03A9F4"));
-            volumeDown.setBackgroundColor(Color.parseColor("#999999"));
+            volumeUp.setBackgroundResource(R.drawable.ic_circle);
+            volumeDown.setBackgroundResource(R.drawable.ic_circle_grayscale);
         } else {
-            volumeUp.setBackgroundColor(Color.parseColor("#03A9F4"));
-            volumeDown.setBackgroundColor(Color.parseColor("#03A9F4"));
+            volumeUp.setBackgroundResource(R.drawable.ic_circle);
+            volumeDown.setBackgroundResource(R.drawable.ic_circle);
         }
     }
 }
