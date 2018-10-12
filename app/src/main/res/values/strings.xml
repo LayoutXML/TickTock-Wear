@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="sharedPreferences">com.layoutxml.tickingsound</string>
+    <string name="isPlayingKey">isPlaying</string>
+    <string name="app_name">Ticking Sound</string>
+</resources>
