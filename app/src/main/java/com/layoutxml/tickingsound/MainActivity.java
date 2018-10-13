@@ -2,8 +2,6 @@ package com.layoutxml.tickingsound;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.res.AssetFileDescriptor;
-import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
@@ -15,13 +13,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.FileDescriptor;
-import java.io.IOException;
-
 public class MainActivity extends WearableActivity {
 
-    private AssetFileDescriptor assetFileDescriptor;
-    private FileDescriptor fileDescriptor;
     private MediaPlayer mediaPlayer;
     private Boolean isPlaying;
     private SharedPreferences sharedPreferences;
@@ -39,12 +32,11 @@ public class MainActivity extends WearableActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        assetFileDescriptor = getResources().openRawResourceFd(R.raw.ticking_sound);
-        fileDescriptor = assetFileDescriptor.getFileDescriptor();
         mediaPlayer  = new MediaPlayer();
 
         sharedPreferences = getSharedPreferences(getString(R.string.sharedPreferences),Context.MODE_PRIVATE);
-        isPlaying = sharedPreferences.getBoolean(getString(R.string.isPlayingKey),false);
+        isPlaying = sharedPreferences.getBoolean(getString(R.string.isPlayingKey_preference),false);
+        currentVolume = sharedPreferences.getInt(getString(R.string.volume_preference),6);
 
         button = findViewById(R.id.button_background);
         buttonIcon = findViewById(R.id.button_icon);
@@ -111,7 +103,7 @@ public class MainActivity extends WearableActivity {
             mediaPlayer.release();
         buttonIcon.setImageDrawable(getDrawable(R.drawable.ic_play));
         isPlaying = false;
-        sharedPreferences.edit().putBoolean(getString(R.string.isPlayingKey),isPlaying).apply();
+        sharedPreferences.edit().putBoolean(getString(R.string.isPlayingKey_preference),isPlaying).apply();
     }
 
     private void startTicking() {
@@ -121,7 +113,7 @@ public class MainActivity extends WearableActivity {
         changeVolume();
         buttonIcon.setImageDrawable(getDrawable(R.drawable.ic_pause));
         isPlaying = !isPlaying;
-        sharedPreferences.edit().putBoolean(getString(R.string.isPlayingKey),isPlaying).apply();
+        sharedPreferences.edit().putBoolean(getString(R.string.isPlayingKey_preference),isPlaying).apply();
     }
 
     private void changeVolume() {
@@ -135,6 +127,7 @@ public class MainActivity extends WearableActivity {
             else
                 currentVolume=11;
         }
+        sharedPreferences.edit().putInt(getString(R.string.volume_preference),currentVolume).apply();
     }
 
     private void updateVolumeText() {
