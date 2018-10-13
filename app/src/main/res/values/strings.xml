@@ -3,5 +3,5 @@
     <string name="sharedPreferences">com.layoutxml.tickingsound</string>
     <string name="isPlayingKey_preference">isPlaying</string>
     <string name="volume_preference">volume</string>
-    <string name="app_name">Ticking Sound</string>
+    <string name="app_name">TickTock Wear</string>
 </resources>
