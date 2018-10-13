@@ -17,6 +17,8 @@ import android.support.wearable.activity.WearableActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -129,8 +131,8 @@ public class MainActivity extends WearableActivity {
         });
 
         generateSettingsListValues();
-
         this.registerReceiver(this.batteryBroadcastReceiver,new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+        pulsate();
     }
 
     private void loadPreferences() {
@@ -142,11 +144,7 @@ public class MainActivity extends WearableActivity {
 
     private void checkRestrictions() {
         loadPreferences();
-        if (!(currentBattery>=minimumBattery && currentBattery<=maximumBattery)) {
-            isRestricted = true;
-        } else {
-            isRestricted = false;
-        }
+        isRestricted = !(currentBattery >= minimumBattery && currentBattery <= maximumBattery);
         actOnRestrictions();
     }
 
@@ -216,6 +214,7 @@ public class MainActivity extends WearableActivity {
             buttonIcon.setImageDrawable(getDrawable(R.drawable.ic_play));
             sharedPreferences.edit().putBoolean(getString(R.string.isPlayingKey_preference),isPlaying).apply();
         }
+        pulsate();
     }
 
     private void startTicking(Boolean fromPaused) {
@@ -228,6 +227,7 @@ public class MainActivity extends WearableActivity {
             buttonIcon.setImageDrawable(getDrawable(R.drawable.ic_pause));
             sharedPreferences.edit().putBoolean(getString(R.string.isPlayingKey_preference), isPlaying).apply();
         }
+        pulsate();
     }
 
     private void changeVolume() {
@@ -256,6 +256,15 @@ public class MainActivity extends WearableActivity {
         } else {
             volumeUp.setBackgroundResource(R.drawable.ic_circle);
             volumeDown.setBackgroundResource(R.drawable.ic_circle);
+        }
+    }
+
+    public void pulsate() {
+        if (!isPlaying) {
+            Animation pulse = AnimationUtils.loadAnimation(this, R.anim.pulse);
+            button.startAnimation(pulse);
+        } else {
+            button.clearAnimation();
         }
     }
 
