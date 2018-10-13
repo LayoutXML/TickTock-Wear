@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--~ Copyright (c) 2018. LayoutXML~ Created by LayoutXML.~ -->
+
+<LinearLayout
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="48dp"
+    android:layout_width="match_parent"
+    android:paddingStart="24dp"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAlignment="viewStart"
+        android:textColor="#ffffff"
+        android:textSize="16sp"
+        tools:text="Menu item name" />
+
+</LinearLayout>

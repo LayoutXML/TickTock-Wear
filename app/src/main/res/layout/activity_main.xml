@@ -12,7 +12,7 @@
         android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="64dp">
+        android:paddingBottom="32dp">
 
         <Button
             android:id="@+id/button_background"
@@ -126,6 +126,17 @@
             app:layout_constraintEnd_toEndOf="@+id/volumeUp"
             app:layout_constraintStart_toStartOf="@+id/volumeUp"
             app:layout_constraintTop_toTopOf="@+id/volumeUp" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/settings_list"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/volumeText" />
 
     </android.support.constraint.ConstraintLayout>
     </ScrollView>
