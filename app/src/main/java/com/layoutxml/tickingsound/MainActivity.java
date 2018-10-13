@@ -36,6 +36,7 @@ public class MainActivity extends WearableActivity {
     private SharedPreferences sharedPreferences;
     private List<ActivityOption> values = new ArrayList<>();
     private SettingsListAdapter mAdapter;
+    private Animation pulse;
     //Temporary values
     private Boolean isPlaying; //describes whether functionality has been started - whether player pressed play (not looking at restrictions)
     private Integer currentBattery;
@@ -261,10 +262,10 @@ public class MainActivity extends WearableActivity {
 
     public void pulsate() {
         if (!isPlaying) {
-            Animation pulse = AnimationUtils.loadAnimation(this, R.anim.pulse);
+            pulse = AnimationUtils.loadAnimation(this, R.anim.pulse);
             button.startAnimation(pulse);
         } else {
-            button.clearAnimation();
+            pulse.setRepeatCount(0);
         }
     }
 
