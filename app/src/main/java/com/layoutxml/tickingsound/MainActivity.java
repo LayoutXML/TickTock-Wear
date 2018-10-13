@@ -1,9 +1,12 @@
 package com.layoutxml.tickingsound;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
+import android.os.BatteryManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
@@ -28,12 +31,20 @@ import java.util.List;
 public class MainActivity extends WearableActivity {
 
     private MediaPlayer mediaPlayer;
-    private Boolean isPlaying;
     private SharedPreferences sharedPreferences;
-    private Integer maxVolume = 11;
-    private Integer currentVolume = 6;
     private List<ActivityOption> values = new ArrayList<>();
     private SettingsListAdapter mAdapter;
+    //Temporary values
+    private Boolean isPlaying; //describes whether functionality has been started - whether player pressed play (not looking at restrictions)
+    private Integer currentBattery;
+    private Boolean isRestricted;
+    private Boolean isPaused;
+    //Preferences
+    private Integer maxVolume = 11;
+    private Integer currentVolume = 6;
+    //Preferences - restrictions
+    private Integer minimumBattery;
+    private Integer maximumBattery;
     //Elements
     private Button button;
     private ImageView buttonIcon;
@@ -43,16 +54,20 @@ public class MainActivity extends WearableActivity {
     private Button volumeUp;
     private RecyclerView recyclerView;
 
+    private BroadcastReceiver batteryBroadcastReceiver = new BroadcastReceiver(){
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            currentBattery = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 100);
+            checkRestrictions();
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         mediaPlayer  = new MediaPlayer();
-
-        sharedPreferences = getSharedPreferences(getString(R.string.sharedPreferences),Context.MODE_PRIVATE);
-        isPlaying = sharedPreferences.getBoolean(getString(R.string.isPlayingKey_preference),false);
-        currentVolume = sharedPreferences.getInt(getString(R.string.volume_preference),6);
 
         button = findViewById(R.id.button_background);
         buttonIcon = findViewById(R.id.button_icon);
@@ -62,8 +77,16 @@ public class MainActivity extends WearableActivity {
         volumeUp = findViewById(R.id.volumeUp);
         recyclerView = findViewById(R.id.settings_list);
 
+        isPaused = false;
+        isRestricted = false;
+        currentBattery = 100;
+
+        sharedPreferences = getSharedPreferences(getString(R.string.sharedPreferences),Context.MODE_PRIVATE);
+        loadPreferences();
+        checkRestrictions();
+
         if (isPlaying || getIntent().getBooleanExtra("fromBoot",false))
-            stopTicking(false);
+            stopTicking(false,false);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         mAdapter = new SettingsListAdapter();
@@ -98,14 +121,52 @@ public class MainActivity extends WearableActivity {
             @Override
             public void onClick(View v) {
                 if (isPlaying) {
-                    stopTicking(false);
+                    stopTicking(false,false);
                 } else {
-                    startTicking();
+                    startTicking(false);
                 }
             }
         });
 
         generateSettingsListValues();
+
+        this.registerReceiver(this.batteryBroadcastReceiver,new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+    }
+
+    private void loadPreferences() {
+        isPlaying = sharedPreferences.getBoolean(getString(R.string.isPlayingKey_preference),false);
+        currentVolume = sharedPreferences.getInt(getString(R.string.volume_preference),6);
+        minimumBattery = sharedPreferences.getInt(getString(R.string.minBattery_preference),0);
+        maximumBattery = sharedPreferences.getInt(getString(R.string.maxBattery_preference),100);
+    }
+
+    private void checkRestrictions() {
+        loadPreferences();
+        if (!(currentBattery>=minimumBattery && currentBattery<=maximumBattery)) {
+            isRestricted = true;
+        } else {
+            isRestricted = false;
+        }
+        actOnRestrictions();
+    }
+
+    private void actOnRestrictions() {
+        if (isPlaying && !isPaused && isRestricted) {
+            //Pause
+            isPaused = true;
+            stopTicking(false,true);
+        }
+        else if (isPlaying && isPaused && !isRestricted) {
+            //Continue
+            isPaused = false;
+            startTicking(true);
+        }
+
+        if (isRestricted) {
+            button.setBackgroundResource(R.drawable.ic_circle_grayscale);
+        } else {
+            button.setBackgroundResource(R.drawable.ic_circle);
+        }
     }
 
     private void generateSettingsListValues() {
@@ -131,31 +192,42 @@ public class MainActivity extends WearableActivity {
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        stopTicking(true);
+    protected void onResume() {
+        super.onResume();
+        checkRestrictions();
     }
 
-    private void stopTicking(Boolean forced) {
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        stopTicking(true,false);
+        unregisterReceiver(batteryBroadcastReceiver);
+    }
+
+    private void stopTicking(Boolean forced, Boolean paused) {
         if (isPlaying && forced) {
             Toast.makeText(this,"To resume sound, minimize the app instead of closing it",Toast.LENGTH_LONG).show();
         }
         mediaPlayer.stop();
         if (forced)
             mediaPlayer.release();
-        buttonIcon.setImageDrawable(getDrawable(R.drawable.ic_play));
-        isPlaying = false;
-        sharedPreferences.edit().putBoolean(getString(R.string.isPlayingKey_preference),isPlaying).apply();
+        if (!paused) {
+            isPlaying = false;
+            buttonIcon.setImageDrawable(getDrawable(R.drawable.ic_play));
+            sharedPreferences.edit().putBoolean(getString(R.string.isPlayingKey_preference),isPlaying).apply();
+        }
     }
 
-    private void startTicking() {
+    private void startTicking(Boolean fromPaused) {
         mediaPlayer = MediaPlayer.create(this,R.raw.ticking_sound);
         mediaPlayer.setLooping(true);
         mediaPlayer.start();
         changeVolume();
-        buttonIcon.setImageDrawable(getDrawable(R.drawable.ic_pause));
-        isPlaying = !isPlaying;
-        sharedPreferences.edit().putBoolean(getString(R.string.isPlayingKey_preference),isPlaying).apply();
+        if (!fromPaused) {
+            isPlaying = true;
+            buttonIcon.setImageDrawable(getDrawable(R.drawable.ic_pause));
+            sharedPreferences.edit().putBoolean(getString(R.string.isPlayingKey_preference), isPlaying).apply();
+        }
     }
 
     private void changeVolume() {

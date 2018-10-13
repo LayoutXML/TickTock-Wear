@@ -2,6 +2,8 @@
 <resources>
     <string name="sharedPreferences">com.layoutxml.tickingsound</string>
     <string name="isPlayingKey_preference">isPlaying</string>
+    <string name="minBattery_preference">minBattery</string>
+    <string name="maxBattery_preference">maxBattery</string>
     <string name="volume_preference">volume</string>
     <string name="app_name">TickTock Wear</string>
 </resources>
