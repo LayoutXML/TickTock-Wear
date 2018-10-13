@@ -1,8 +1,6 @@
-package com.layoutxml.tickingsound;
+package com.layoutxml.tickingsound.objects;
 
-import android.app.Activity;
-
-class ActivityOption {
+public class ActivityOption {
     private String name, extra;
     private Class activity;
 

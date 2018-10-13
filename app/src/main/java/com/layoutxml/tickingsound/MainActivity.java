@@ -10,9 +10,7 @@ import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.wear.widget.WearableLinearLayoutManager;
 import android.support.wearable.activity.WearableActivity;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +18,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.layoutxml.tickingsound.activities.ActivityTextViewActivity;
+import com.layoutxml.tickingsound.objects.ActivityOption;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -109,17 +110,22 @@ public class MainActivity extends WearableActivity {
 
     private void generateSettingsListValues() {
         ActivityOption activityOption = new ActivityOption();
-        activityOption.setName("Element 1");
+        activityOption.setName("Restrictions");
+        activityOption.setExtra("restrictions");
+        activityOption.setActivity(ActivityTextViewActivity.class);
         values.add(activityOption);
 
         activityOption = new ActivityOption();
-        activityOption.setName("Element 2");
+        activityOption.setName("Integrations");
+        activityOption.setExtra("integrations");
+        activityOption.setActivity(ActivityTextViewActivity.class);
         values.add(activityOption);
 
         activityOption = new ActivityOption();
-        activityOption.setName("Element 3");
+        activityOption.setName("About");
+        activityOption.setExtra("about");
+        activityOption.setActivity(ActivityTextViewActivity.class);
         values.add(activityOption);
-
 
         mAdapter.notifyDataSetChanged();
     }
