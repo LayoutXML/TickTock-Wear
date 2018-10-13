@@ -118,6 +118,7 @@ public class MainActivity extends WearableActivity {
         mediaPlayer = MediaPlayer.create(this,R.raw.ticking_sound);
         mediaPlayer.setLooping(true);
         mediaPlayer.start();
+        changeVolume();
         buttonIcon.setImageDrawable(getDrawable(R.drawable.ic_pause));
         isPlaying = !isPlaying;
         sharedPreferences.edit().putBoolean(getString(R.string.isPlayingKey),isPlaying).apply();
