@@ -43,14 +43,6 @@ public class MainActivity extends WearableActivity {
         fileDescriptor = assetFileDescriptor.getFileDescriptor();
         mediaPlayer  = new MediaPlayer();
 
-        try {
-            mediaPlayer.setDataSource(fileDescriptor, assetFileDescriptor.getStartOffset(), assetFileDescriptor.getLength());
-        } catch (IOException e) {
-            Toast.makeText(this,"Unable to initialize. "+e.toString(),Toast.LENGTH_SHORT).show();
-            System.exit(0);
-        }
-        mediaPlayer.setLooping(true);
-
         sharedPreferences = getSharedPreferences(getString(R.string.sharedPreferences),Context.MODE_PRIVATE);
         isPlaying = sharedPreferences.getBoolean(getString(R.string.isPlayingKey),false);
 
@@ -60,6 +52,9 @@ public class MainActivity extends WearableActivity {
         volumeText = findViewById(R.id.volumeText);
         volumeDown = findViewById(R.id.volumeDown);
         volumeUp = findViewById(R.id.volumeUp);
+
+        if (isPlaying || getIntent().getBooleanExtra("fromBoot",false))
+            stopTicking(false);
 
         if (isPlaying) {
             buttonIcon.setImageDrawable(getDrawable(R.drawable.ic_pause));
@@ -120,12 +115,8 @@ public class MainActivity extends WearableActivity {
     }
 
     private void startTicking() {
-        try {
-            mediaPlayer.prepare();
-        } catch (IOException e) {
-            Toast.makeText(this,"Unable to initialize. "+e.toString(),Toast.LENGTH_SHORT).show();
-            System.exit(0);
-        }
+        mediaPlayer = MediaPlayer.create(this,R.raw.ticking_sound);
+        mediaPlayer.setLooping(true);
         mediaPlayer.start();
         buttonIcon.setImageDrawable(getDrawable(R.drawable.ic_pause));
         isPlaying = !isPlaying;
