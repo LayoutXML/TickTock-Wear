@@ -6,6 +6,9 @@
     <string name="maxBattery_preference">maxBattery</string>
     <string name="charging_preference">chargingPreference</string>
     <string name="notcharging_preference">nitChargingPreference</string>
+    <string name="ambient_preference">ambientPreference</string>
+    <string name="interactive_preference">interactivePreference</string>
     <string name="volume_preference">volume</string>
     <string name="app_name">TickTock Wear</string>
+    <string name="permission_description_AMBIENT_INTERACTIVE">Allows the app to pause or resume TickTock Wear ticking sound. Malicious or buggy apps may cause the ticking sound to stop unexpectedly.</string>
 </resources>

@@ -9,7 +9,6 @@ import android.media.MediaPlayer;
 import android.os.BatteryManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -43,6 +42,8 @@ public class MainActivity extends WearableActivity {
     private Boolean isRestricted;
     private Boolean isPaused;
     private Boolean isCharging;
+    private Boolean isInAmbient;
+    private Boolean everPlayed;
     //Preferences
     private Integer maxVolume = 11;
     private Integer currentVolume = 6;
@@ -51,22 +52,41 @@ public class MainActivity extends WearableActivity {
     private Integer maximumBattery;
     private Boolean whileCharging;
     private Boolean whileNotCharging;
+    private Boolean whileInAmbient;
+    private Boolean whileInInteractive;
     //Elements
     private Button button;
     private ImageView buttonIcon;
-    private ConstraintLayout constraintLayout;
     private TextView volumeText;
     private Button volumeDown;
     private Button volumeUp;
     private RecyclerView recyclerView;
+    //Intent constants
+    private static final String TRANSITION_TO_AMBIENT_MODE = "com.layoutxml.tickingsound.TRANSITION_TO_AMBIENT_MODE";
+    private static final String TRANSITION_TO_INTERACTIVE_MODE = "com.layoutxml.tickingsound.TRANSITION_TO_INTERACTIVE_MODE";
 
     private BroadcastReceiver batteryBroadcastReceiver = new BroadcastReceiver(){
         @Override
         public void onReceive(Context context, Intent intent) {
-            currentBattery = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 100);
-            int pluggedIn = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1);
-            isCharging = pluggedIn == BatteryManager.BATTERY_PLUGGED_AC || pluggedIn == BatteryManager.BATTERY_PLUGGED_USB || pluggedIn == BatteryManager.BATTERY_PLUGGED_WIRELESS;
-            checkRestrictions();
+            String action = intent.getAction();
+            if (action!=null) {
+                switch (action) {
+                    case TRANSITION_TO_AMBIENT_MODE:
+                        isInAmbient = true;
+                        checkRestrictions();
+                        break;
+                    case TRANSITION_TO_INTERACTIVE_MODE:
+                        isInAmbient = false;
+                        checkRestrictions();
+                        break;
+                    case Intent.ACTION_BATTERY_CHANGED:
+                        currentBattery = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 100);
+                        int pluggedIn = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1);
+                        isCharging = pluggedIn == BatteryManager.BATTERY_PLUGGED_AC || pluggedIn == BatteryManager.BATTERY_PLUGGED_USB || pluggedIn == BatteryManager.BATTERY_PLUGGED_WIRELESS;
+                        checkRestrictions();
+                        break;
+                }
+            }
         }
     };
 
@@ -75,11 +95,12 @@ public class MainActivity extends WearableActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        setAmbientEnabled();
+
         mediaPlayer  = new MediaPlayer();
 
         button = findViewById(R.id.button_background);
         buttonIcon = findViewById(R.id.button_icon);
-        constraintLayout = findViewById(R.id.constraintLayout);
         volumeText = findViewById(R.id.volumeText);
         volumeDown = findViewById(R.id.volumeDown);
         volumeUp = findViewById(R.id.volumeUp);
@@ -89,6 +110,8 @@ public class MainActivity extends WearableActivity {
         isRestricted = false;
         currentBattery = 100;
         isCharging = false;
+        isInAmbient = false;
+        everPlayed = false;
 
         sharedPreferences = getSharedPreferences(getString(R.string.sharedPreferences),Context.MODE_PRIVATE);
         loadPreferences();
@@ -138,7 +161,11 @@ public class MainActivity extends WearableActivity {
         });
 
         generateSettingsListValues();
-        this.registerReceiver(this.batteryBroadcastReceiver,new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(Intent.ACTION_BATTERY_CHANGED);
+        intentFilter.addAction(TRANSITION_TO_AMBIENT_MODE);
+        intentFilter.addAction(TRANSITION_TO_INTERACTIVE_MODE);
+        this.registerReceiver(this.batteryBroadcastReceiver,intentFilter);
         pulsate();
     }
 
@@ -149,6 +176,8 @@ public class MainActivity extends WearableActivity {
         maximumBattery = sharedPreferences.getInt(getString(R.string.maxBattery_preference),100);
         whileCharging = sharedPreferences.getBoolean(getString(R.string.charging_preference),true);
         whileNotCharging = sharedPreferences.getBoolean(getString(R.string.notcharging_preference),true);
+        whileInAmbient = sharedPreferences.getBoolean(getString(R.string.ambient_preference),true);
+        whileInInteractive = sharedPreferences.getBoolean(getString(R.string.interactive_preference),true);
     }
 
     private void checkRestrictions() {
@@ -160,6 +189,15 @@ public class MainActivity extends WearableActivity {
                     isRestricted = true;
             } else {
                 if (!whileNotCharging)
+                    isRestricted = true;
+            }
+        }
+        if (!isRestricted) {
+            if (isInAmbient) {
+                if (!whileInAmbient)
+                    isRestricted = true;
+            } else {
+                if (!whileInInteractive)
                     isRestricted = true;
             }
         }
@@ -211,6 +249,7 @@ public class MainActivity extends WearableActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        isInAmbient = false;
         checkRestrictions();
     }
 
@@ -225,11 +264,11 @@ public class MainActivity extends WearableActivity {
         if (isPlaying && forced) {
             Toast.makeText(this,"To resume sound, minimize the app instead of closing it",Toast.LENGTH_LONG).show();
         }
-        if (mediaPlayer!=null) {
+        if ((everPlayed && isPlaying) || (everPlayed && paused))
             mediaPlayer.stop();
-            mediaPlayer.release();
-        }
         if (!paused) {
+            if (mediaPlayer!=null)
+                mediaPlayer.release();
             isPlaying = false;
             buttonIcon.setImageDrawable(getDrawable(R.drawable.ic_play));
             sharedPreferences.edit().putBoolean(getString(R.string.isPlayingKey_preference),isPlaying).apply();
@@ -238,10 +277,13 @@ public class MainActivity extends WearableActivity {
     }
 
     private void startTicking(Boolean fromPaused) {
-        mediaPlayer = MediaPlayer.create(this,R.raw.ticking_sound);
-        mediaPlayer.setLooping(true);
-        mediaPlayer.start();
-        changeVolume();
+        mediaPlayer = MediaPlayer.create(this, R.raw.ticking_sound);
+        if (!isRestricted) {
+            mediaPlayer.setLooping(true);
+            mediaPlayer.start();
+            everPlayed = true;
+            changeVolume();
+        }
         if (!fromPaused) {
             isPlaying = true;
             buttonIcon.setImageDrawable(getDrawable(R.drawable.ic_pause));

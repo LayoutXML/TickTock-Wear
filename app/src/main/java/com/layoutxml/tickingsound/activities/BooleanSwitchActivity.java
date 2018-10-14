@@ -43,10 +43,12 @@ public class BooleanSwitchActivity extends Activity {
         mWearableRecyclerView.setAdapter(mAdapter);
 
         if (getIntent().getStringExtra("Activity").equals("charging"))
-            generateValues();
+            generateChargingValues();
+        else if (getIntent().getStringExtra("Activity").equals("ambient&interactive_modes"))
+            generateAmbientAndInteractiveModesValues();
     }
 
-    private void generateValues(){
+    private void generateChargingValues(){
         BooleanOption option = new BooleanOption();
         option.setName("Play while charging");
         option.setKey(getString(R.string.charging_preference));
@@ -56,6 +58,22 @@ public class BooleanSwitchActivity extends Activity {
         option = new BooleanOption();
         option.setName("Play while not charging");
         option.setKey(getString(R.string.notcharging_preference));
+        option.setDefaultValue(true);
+        values.add(option);
+
+        mAdapter.notifyDataSetChanged();
+    }
+
+    private void generateAmbientAndInteractiveModesValues(){
+        BooleanOption option = new BooleanOption();
+        option.setName("Play while in ambient mode");
+        option.setKey(getString(R.string.ambient_preference));
+        option.setDefaultValue(true);
+        values.add(option);
+
+        option = new BooleanOption();
+        option.setName("Play while in interactive mode");
+        option.setKey(getString(R.string.interactive_preference));
         option.setDefaultValue(true);
         values.add(option);
 

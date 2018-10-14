@@ -8,6 +8,12 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
+    <permission
+        android:name="com.layoutxml.tickingsound.AMBIENT_INTERACTIVE_MODE_CHANGE"
+        android:label="Pause or resume ticking sound (for ambient and interactive modes)"
+        android:description="@string/permission_description_AMBIENT_INTERACTIVE"
+        android:protectionLevel="dangerous"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -27,7 +33,6 @@
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
