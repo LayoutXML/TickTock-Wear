@@ -12,8 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.layoutxml.tickingsound.MainActivity;
 import com.layoutxml.tickingsound.R;
 import com.layoutxml.tickingsound.activities.custom.BatteryPercentageActivity;
 import com.layoutxml.tickingsound.objects.ActivityOption;
@@ -39,8 +39,10 @@ public class ActivityTextViewActivity extends Activity {
         mWearableRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mWearableRecyclerView.setAdapter(mAdapter);
 
-        if (getIntent().getStringExtra("Activity").equals("restrictions"))
+        if (getIntent().getStringExtra("Activity").equals("restrictions")) {
+            Toast.makeText(getApplicationContext(),"After changing settings go back to the main screen",Toast.LENGTH_SHORT).show();
             generateValues();
+        }
     }
 
     private void generateValues(){
@@ -48,6 +50,12 @@ public class ActivityTextViewActivity extends Activity {
         activityOption.setName("Battery percentage");
         activityOption.setActivity(BatteryPercentageActivity.class);
         activityOption.setExtra("battery_percentage");
+        values.add(activityOption);
+
+        activityOption = new ActivityOption();
+        activityOption.setName("Charging");
+        activityOption.setActivity(BooleanSwitchActivity.class);
+        activityOption.setExtra("charging");
         values.add(activityOption);
 
         mAdapter.notifyDataSetChanged();

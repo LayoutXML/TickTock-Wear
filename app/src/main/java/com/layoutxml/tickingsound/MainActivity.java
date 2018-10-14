@@ -38,16 +38,19 @@ public class MainActivity extends WearableActivity {
     private SettingsListAdapter mAdapter;
     private Animation pulse;
     //Temporary values
-    private Boolean isPlaying; //describes whether functionality has been started - whether player pressed play (not looking at restrictions)
     private Integer currentBattery;
+    private Boolean isPlaying; //describes whether functionality has been started - whether player pressed play (not looking at restrictions)
     private Boolean isRestricted;
     private Boolean isPaused;
+    private Boolean isCharging;
     //Preferences
     private Integer maxVolume = 11;
     private Integer currentVolume = 6;
     //Preferences - restrictions
     private Integer minimumBattery;
     private Integer maximumBattery;
+    private Boolean whileCharging;
+    private Boolean whileNotCharging;
     //Elements
     private Button button;
     private ImageView buttonIcon;
@@ -61,6 +64,8 @@ public class MainActivity extends WearableActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             currentBattery = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 100);
+            int pluggedIn = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1);
+            isCharging = pluggedIn == BatteryManager.BATTERY_PLUGGED_AC || pluggedIn == BatteryManager.BATTERY_PLUGGED_USB || pluggedIn == BatteryManager.BATTERY_PLUGGED_WIRELESS;
             checkRestrictions();
         }
     };
@@ -83,6 +88,7 @@ public class MainActivity extends WearableActivity {
         isPaused = false;
         isRestricted = false;
         currentBattery = 100;
+        isCharging = false;
 
         sharedPreferences = getSharedPreferences(getString(R.string.sharedPreferences),Context.MODE_PRIVATE);
         loadPreferences();
@@ -102,7 +108,7 @@ public class MainActivity extends WearableActivity {
             buttonIcon.setImageDrawable(getDrawable(R.drawable.ic_play));
         }
 
-        changeVolume();
+        //changeVolume();
 
         volumeUp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -141,11 +147,23 @@ public class MainActivity extends WearableActivity {
         currentVolume = sharedPreferences.getInt(getString(R.string.volume_preference),6);
         minimumBattery = sharedPreferences.getInt(getString(R.string.minBattery_preference),0);
         maximumBattery = sharedPreferences.getInt(getString(R.string.maxBattery_preference),100);
+        whileCharging = sharedPreferences.getBoolean(getString(R.string.charging_preference),true);
+        whileNotCharging = sharedPreferences.getBoolean(getString(R.string.notcharging_preference),true);
     }
 
     private void checkRestrictions() {
         loadPreferences();
         isRestricted = !(currentBattery >= minimumBattery && currentBattery <= maximumBattery);
+        if (!isRestricted) {
+            if (isCharging) {
+                if (!whileCharging)
+                    isRestricted = true;
+            } else {
+                if (!whileNotCharging)
+                    isRestricted = true;
+            }
+        }
+
         actOnRestrictions();
     }
 
@@ -207,8 +225,10 @@ public class MainActivity extends WearableActivity {
         if (isPlaying && forced) {
             Toast.makeText(this,"To resume sound, minimize the app instead of closing it",Toast.LENGTH_LONG).show();
         }
-        mediaPlayer.stop();
-        mediaPlayer.release();
+        if (mediaPlayer!=null) {
+            mediaPlayer.stop();
+            mediaPlayer.release();
+        }
         if (!paused) {
             isPlaying = false;
             buttonIcon.setImageDrawable(getDrawable(R.drawable.ic_play));
