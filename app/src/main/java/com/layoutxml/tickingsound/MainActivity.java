@@ -208,8 +208,7 @@ public class MainActivity extends WearableActivity {
             Toast.makeText(this,"To resume sound, minimize the app instead of closing it",Toast.LENGTH_LONG).show();
         }
         mediaPlayer.stop();
-        if (forced)
-            mediaPlayer.release();
+        mediaPlayer.release();
         if (!paused) {
             isPlaying = false;
             buttonIcon.setImageDrawable(getDrawable(R.drawable.ic_play));
