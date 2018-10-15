@@ -131,7 +131,7 @@ public class MainActivity extends WearableActivity {
             buttonIcon.setImageDrawable(getDrawable(R.drawable.ic_play));
         }
 
-        //changeVolume();
+        changeVolume();
 
         volumeUp.setOnClickListener(new View.OnClickListener() {
             @Override
