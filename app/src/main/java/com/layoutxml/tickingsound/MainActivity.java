@@ -43,7 +43,7 @@ public class MainActivity extends WearableActivity {
     private Boolean isPaused;
     private Boolean isCharging;
     private Boolean isInAmbient;
-    private Boolean everPlayed;
+    private Boolean actuallyPlaying;
     //Preferences
     private Integer maxVolume = 11;
     private Integer currentVolume = 6;
@@ -111,10 +111,10 @@ public class MainActivity extends WearableActivity {
         currentBattery = 100;
         isCharging = false;
         isInAmbient = false;
-        everPlayed = false;
+        actuallyPlaying = false;
+        isPlaying = false;
 
         sharedPreferences = getSharedPreferences(getString(R.string.sharedPreferences),Context.MODE_PRIVATE);
-        loadPreferences();
         checkRestrictions();
 
         if (isPlaying || getIntent().getBooleanExtra("fromBoot",false))
@@ -170,7 +170,6 @@ public class MainActivity extends WearableActivity {
     }
 
     private void loadPreferences() {
-        isPlaying = sharedPreferences.getBoolean(getString(R.string.isPlayingKey_preference),false);
         currentVolume = sharedPreferences.getInt(getString(R.string.volume_preference),6);
         minimumBattery = sharedPreferences.getInt(getString(R.string.minBattery_preference),0);
         maximumBattery = sharedPreferences.getInt(getString(R.string.maxBattery_preference),100);
@@ -264,30 +263,37 @@ public class MainActivity extends WearableActivity {
         if (isPlaying && forced) {
             Toast.makeText(this,"To resume sound, minimize the app instead of closing it",Toast.LENGTH_LONG).show();
         }
-        if ((everPlayed && isPlaying) || (everPlayed && paused))
+        if (actuallyPlaying) {
+            actuallyPlaying = false;
             mediaPlayer.stop();
+        }
+        if (mediaPlayer!=null)
+            mediaPlayer.release();
+            mediaPlayer = null;
         if (!paused) {
-            if (mediaPlayer!=null)
-                mediaPlayer.release();
             isPlaying = false;
             buttonIcon.setImageDrawable(getDrawable(R.drawable.ic_play));
-            sharedPreferences.edit().putBoolean(getString(R.string.isPlayingKey_preference),isPlaying).apply();
         }
         pulsate();
     }
 
     private void startTicking(Boolean fromPaused) {
+        if (mediaPlayer!=null) {
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
         mediaPlayer = MediaPlayer.create(this, R.raw.ticking_sound);
         if (!isRestricted) {
             mediaPlayer.setLooping(true);
             mediaPlayer.start();
-            everPlayed = true;
+            actuallyPlaying = true;
             changeVolume();
+        } else {
+            isPaused = true;
         }
         if (!fromPaused) {
             isPlaying = true;
             buttonIcon.setImageDrawable(getDrawable(R.drawable.ic_pause));
-            sharedPreferences.edit().putBoolean(getString(R.string.isPlayingKey_preference), isPlaying).apply();
         }
         pulsate();
     }
