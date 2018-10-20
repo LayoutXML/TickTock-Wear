@@ -45,6 +45,7 @@ public class MainActivity extends WearableActivity {
     private Boolean isCharging;
     private Boolean isInAmbient;
     private Boolean actuallyPlaying;
+    private String senderPackage;
     //Preferences
     private Integer maxVolume = 11;
     private Integer currentVolume = 6;
@@ -74,10 +75,16 @@ public class MainActivity extends WearableActivity {
                 switch (action) {
                     case TRANSITION_TO_AMBIENT_MODE:
                         isInAmbient = true;
+                        senderPackage = intent.getStringExtra("package");
+                        if (senderPackage==null)
+                            senderPackage="com.layoutxml.tickingsound";
                         checkRestrictions();
                         break;
                     case TRANSITION_TO_INTERACTIVE_MODE:
                         isInAmbient = false;
+                        senderPackage = intent.getStringExtra("package");
+                        if (senderPackage==null)
+                            senderPackage="com.layoutxml.tickingsound";
                         checkRestrictions();
                         break;
                     case Intent.ACTION_BATTERY_CHANGED:
@@ -116,6 +123,8 @@ public class MainActivity extends WearableActivity {
         isPlaying = false;
 
         sharedPreferences = getSharedPreferences(getString(R.string.sharedPreferences),Context.MODE_PRIVATE);
+        sharedPreferences.edit().putBoolean(senderPackage+"."+getString(R.string.ambient_preference),true).apply();
+        sharedPreferences.edit().putBoolean(senderPackage+"."+getString(R.string.interactive_preference),true).apply();
         checkRestrictions();
 
         if (isPlaying || getIntent().getBooleanExtra("fromBoot",false))
@@ -176,8 +185,8 @@ public class MainActivity extends WearableActivity {
         maximumBattery = sharedPreferences.getInt(getString(R.string.maxBattery_preference),100);
         whileCharging = sharedPreferences.getBoolean(getString(R.string.charging_preference),true);
         whileNotCharging = sharedPreferences.getBoolean(getString(R.string.notcharging_preference),true);
-        whileInAmbient = sharedPreferences.getBoolean(getString(R.string.ambient_preference),true);
-        whileInInteractive = sharedPreferences.getBoolean(getString(R.string.interactive_preference),true);
+        whileInAmbient = sharedPreferences.getBoolean(senderPackage+"."+getString(R.string.ambient_preference),true);
+        whileInInteractive = sharedPreferences.getBoolean(senderPackage+"."+getString(R.string.interactive_preference),true);
     }
 
     private void checkRestrictions() {
@@ -302,7 +311,8 @@ public class MainActivity extends WearableActivity {
     private void changeVolume() {
         if (currentVolume>=1 && currentVolume<=11) {
             float newVolume = (float) (Math.log(maxVolume - currentVolume) / Math.log(maxVolume));
-            mediaPlayer.setVolume(1 - newVolume, 1 - newVolume);
+            if (mediaPlayer!=null)
+                mediaPlayer.setVolume(1 - newVolume, 1 - newVolume);
             updateVolumeText();
         } else {
             if (currentVolume<=1)

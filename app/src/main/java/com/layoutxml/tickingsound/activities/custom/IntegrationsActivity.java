@@ -20,6 +20,7 @@ import com.layoutxml.applistmanagerlibrary.interfaces.AppListener;
 import com.layoutxml.applistmanagerlibrary.interfaces.SortListener;
 import com.layoutxml.applistmanagerlibrary.objects.AppData;
 import com.layoutxml.tickingsound.R;
+import com.layoutxml.tickingsound.activities.BooleanSwitchActivity;
 import com.layoutxml.tickingsound.objects.ActivityOption;
 
 import java.util.ArrayList;
@@ -97,7 +98,12 @@ public class IntegrationsActivity extends Activity implements AppListener, SortL
 
             @Override
             public void onClick(View v) {
-                    //getAdapterPosition()).getPackageName());
+                int position = getAdapterPosition(); // gets item position
+                Intent intent;
+                intent = new Intent(IntegrationsActivity.this, BooleanSwitchActivity.class);
+                intent.putExtra("Activity","ambient&interactive_modes");
+                intent.putExtra("Package",values.get(position).getPackageName());
+                IntegrationsActivity.this.startActivity(intent);
             }
         }
 

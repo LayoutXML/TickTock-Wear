@@ -67,13 +67,13 @@ public class BooleanSwitchActivity extends Activity {
     private void generateAmbientAndInteractiveModesValues(){
         BooleanOption option = new BooleanOption();
         option.setName("Play while in ambient mode");
-        option.setKey(getString(R.string.ambient_preference));
+        option.setKey(getIntent().getStringExtra("Package")+"."+getString(R.string.ambient_preference));
         option.setDefaultValue(true);
         values.add(option);
 
         option = new BooleanOption();
         option.setName("Play while in interactive mode");
-        option.setKey(getString(R.string.interactive_preference));
+        option.setKey(getIntent().getStringExtra("Package")+"."+getString(R.string.interactive_preference));
         option.setDefaultValue(true);
         values.add(option);
 

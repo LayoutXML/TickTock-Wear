@@ -43,9 +43,6 @@ public class ActivityTextViewActivity extends Activity {
             Toast.makeText(getApplicationContext(),"After changing settings go back to the main screen",Toast.LENGTH_SHORT).show();
             generateRestrictionsValues();
         }
-        else if (getIntent().getStringExtra("Activity").equals("integrations")) {
-            generateIntegrationsValues();
-        }
     }
 
     private void generateRestrictionsValues(){
@@ -59,16 +56,6 @@ public class ActivityTextViewActivity extends Activity {
         activityOption.setName("Charging");
         activityOption.setActivity(BooleanSwitchActivity.class);
         activityOption.setExtra("charging");
-        values.add(activityOption);
-
-        mAdapter.notifyDataSetChanged();
-    }
-
-    private void generateIntegrationsValues(){
-        ActivityOption activityOption = new ActivityOption();
-        activityOption.setName("Ambient & interactive modes");
-        activityOption.setActivity(BooleanSwitchActivity.class);
-        activityOption.setExtra("ambient&interactive_modes");
         values.add(activityOption);
 
         mAdapter.notifyDataSetChanged();
