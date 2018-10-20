@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.layoutxml.applistmanagerlibrary.AppList;
 import com.layoutxml.applistmanagerlibrary.interfaces.AppListener;
@@ -48,6 +49,7 @@ public class IntegrationsActivity extends Activity implements AppListener, SortL
         String[] permissions = {"com.layoutxml.tickingsound.AMBIENT_INTERACTIVE_MODE_CHANGE"};
 
         progressBar = findViewById(R.id.progressBar);
+        Toast.makeText(getApplicationContext(),"After changing settings go back to the main screen",Toast.LENGTH_SHORT).show();
 
         AppList.registerListeners(IntegrationsActivity.this,null,null,null,null,null,IntegrationsActivity.this);
         AppList.getSomeApps(getApplicationContext(),0,false,permissions,true,0);

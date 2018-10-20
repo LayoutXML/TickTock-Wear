@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.layoutxml.tickingsound.R;
 import com.layoutxml.tickingsound.objects.BooleanOption;
@@ -100,6 +101,8 @@ public class BooleanSwitchActivity extends Activity {
                         prefs.edit().putBoolean(selectedMenuItem.getKey(),!selectedMenuItem.getValue()).apply();
                         selectedMenuItem.setValue(!selectedMenuItem.getValue());
                         switcher.setChecked(selectedMenuItem.getValue());
+                        if (getIntent().getStringExtra("Activity").equals("ambient&interactive_modes"))
+                            Toast.makeText(getApplicationContext(),"When you change the watch face restart TickTock",Toast.LENGTH_SHORT).show();
                     }
                 });
             }
