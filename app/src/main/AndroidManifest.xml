@@ -39,6 +39,7 @@
         <activity android:name=".activities.ActivityTextViewActivity" />
         <activity android:name=".activities.custom.BatteryPercentageActivity" />
         <activity android:name=".activities.BooleanSwitchActivity" />
+        <activity android:name=".activities.custom.IntegrationsActivity" />
 
         <receiver
             android:name=".BootReceiver"

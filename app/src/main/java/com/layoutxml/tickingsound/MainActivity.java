@@ -24,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.layoutxml.tickingsound.activities.ActivityTextViewActivity;
+import com.layoutxml.tickingsound.activities.custom.IntegrationsActivity;
 import com.layoutxml.tickingsound.objects.ActivityOption;
 
 import java.util.ArrayList;
@@ -233,7 +234,7 @@ public class MainActivity extends WearableActivity {
         activityOption = new ActivityOption();
         activityOption.setName("Integrations");
         activityOption.setExtra("integrations");
-        activityOption.setActivity(ActivityTextViewActivity.class);
+        activityOption.setActivity(IntegrationsActivity.class);
         values.add(activityOption);
 
         activityOption = new ActivityOption();
