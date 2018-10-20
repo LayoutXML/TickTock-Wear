@@ -4,6 +4,7 @@
     package="com.layoutxml.tickingsound">
 
     <uses-feature android:name="android.hardware.type.watch" />
+    <uses-feature android:name="android.hardware.audio.output" />
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
