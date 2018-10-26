@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.BatteryManager;
 import android.os.Bundle;
@@ -260,6 +261,16 @@ public class MainActivity extends WearableActivity {
         super.onResume();
         isInAmbient = false;
         checkRestrictions();
+        AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        int currentVolume = 0;
+        if (audioManager != null) {
+            currentVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+            int maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+            int currentVolumePercentage = 100 * currentVolume/maxVolume;
+            if (currentVolumePercentage==0) {
+                Toast.makeText(this,"Watch is in silent mode",Toast.LENGTH_LONG).show();
+            }
+        }
     }
 
     @Override
