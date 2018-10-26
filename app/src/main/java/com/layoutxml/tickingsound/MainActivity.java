@@ -360,22 +360,16 @@ public class MainActivity extends WearableActivity {
         }
 
         if (pulse!=null)
-        pulse.setAnimationListener(new Animation.AnimationListener()
-        {
-
-            public void onAnimationStart(Animation arg0)
-            {
+        pulse.setAnimationListener(new Animation.AnimationListener() {
+            public void onAnimationStart(Animation arg0) {
                 animationPulseCount = 0;
             }
 
-
-            public void onAnimationRepeat(Animation arg0)
-            {
+            public void onAnimationRepeat(Animation arg0) {
                 animationPulseCount++;
             }
 
-            public void onAnimationEnd(Animation arg0)
-            {
+            public void onAnimationEnd(Animation arg0) {
                 if (animationPulseCount%2==0 && isPlaying) {
                     pulseEnd = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.pulse_end);
                     button.startAnimation(pulseEnd);
