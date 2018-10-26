@@ -38,6 +38,7 @@ public class MainActivity extends WearableActivity {
     private List<ActivityOption> values = new ArrayList<>();
     private SettingsListAdapter mAdapter;
     private Animation pulse;
+    private Animation pulseEnd;
     //Temporary values
     private Integer currentBattery;
     private Boolean isPlaying; //describes whether functionality has been started - whether player pressed play (not looking at restrictions)
@@ -47,6 +48,7 @@ public class MainActivity extends WearableActivity {
     private Boolean isInAmbient;
     private Boolean actuallyPlaying;
     private String senderPackage;
+    private Integer animationPulseCount=0;
     //Preferences
     private Integer maxVolume = 11;
     private Integer currentVolume = 6;
@@ -356,6 +358,30 @@ public class MainActivity extends WearableActivity {
         } else {
             pulse.setRepeatCount(0);
         }
+
+        if (pulse!=null)
+        pulse.setAnimationListener(new Animation.AnimationListener()
+        {
+
+            public void onAnimationStart(Animation arg0)
+            {
+                animationPulseCount = 0;
+            }
+
+
+            public void onAnimationRepeat(Animation arg0)
+            {
+                animationPulseCount++;
+            }
+
+            public void onAnimationEnd(Animation arg0)
+            {
+                if (animationPulseCount%2==0 && isPlaying) {
+                    pulseEnd = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.pulse_end);
+                    button.startAnimation(pulseEnd);
+                }
+            }
+        });
     }
 
     public class SettingsListAdapter extends RecyclerView.Adapter<SettingsListAdapter.MyViewHolder>{
