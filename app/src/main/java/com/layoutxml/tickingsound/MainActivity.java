@@ -78,17 +78,19 @@ public class MainActivity extends WearableActivity {
             if (action!=null) {
                 switch (action) {
                     case TRANSITION_TO_AMBIENT_MODE:
-                        isInAmbient = true;
                         senderPackage = intent.getStringExtra("package");
                         if (senderPackage==null)
                             senderPackage="com.layoutxml.tickingsound";
+                        else
+                            isInAmbient = true;
                         checkRestrictions();
                         break;
                     case TRANSITION_TO_INTERACTIVE_MODE:
-                        isInAmbient = false;
                         senderPackage = intent.getStringExtra("package");
                         if (senderPackage==null)
                             senderPackage="com.layoutxml.tickingsound";
+                        else
+                            isInAmbient = false;
                         checkRestrictions();
                         break;
                     case Intent.ACTION_BATTERY_CHANGED:
