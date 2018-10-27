@@ -25,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.layoutxml.tickingsound.activities.ActivityTextViewActivity;
+import com.layoutxml.tickingsound.activities.custom.AboutActivity;
 import com.layoutxml.tickingsound.activities.custom.IntegrationsActivity;
 import com.layoutxml.tickingsound.objects.ActivityOption;
 
@@ -252,7 +253,7 @@ public class MainActivity extends WearableActivity {
         activityOption = new ActivityOption();
         activityOption.setName("About");
         activityOption.setExtra("about");
-        activityOption.setActivity(ActivityTextViewActivity.class);
+        activityOption.setActivity(AboutActivity.class);
         values.add(activityOption);
 
         mAdapter.notifyDataSetChanged();

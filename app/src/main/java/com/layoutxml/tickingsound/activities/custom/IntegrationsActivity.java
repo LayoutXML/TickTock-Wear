@@ -22,7 +22,6 @@ import com.layoutxml.applistmanagerlibrary.interfaces.SortListener;
 import com.layoutxml.applistmanagerlibrary.objects.AppData;
 import com.layoutxml.tickingsound.R;
 import com.layoutxml.tickingsound.activities.BooleanSwitchActivity;
-import com.layoutxml.tickingsound.objects.ActivityOption;
 
 import java.util.ArrayList;
 import java.util.List;
