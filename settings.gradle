@@ -1,3 +1,1 @@
 include ':app'
-include ':applistmanagerlibrary'
-project(':applistmanagerlibrary').projectDir = new File(settingsDir, '../AppListManager/applistmanagerlibrary')
