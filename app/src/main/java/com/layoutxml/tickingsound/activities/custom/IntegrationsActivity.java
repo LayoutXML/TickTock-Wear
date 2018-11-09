@@ -2,6 +2,7 @@ package com.layoutxml.tickingsound.activities.custom;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -31,6 +32,7 @@ public class IntegrationsActivity extends Activity implements AppListener, SortL
     private List<AppData> values = new ArrayList<>();
     private IntegrationsAdapter mAdapter;
     private ProgressBar progressBar;
+    private List<AppData> promotedIntegrations = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +70,7 @@ public class IntegrationsActivity extends Activity implements AppListener, SortL
 
     @Override
     public void appListener(List<AppData> list, Integer integer, Boolean aBoolean, String[] strings, Boolean aBoolean1, Integer integer1) {
-        AppList.sort(list,AppList.BY_APPNAME_IGNORE_CASE,AppList.IN_ASCENDING,integer1);
+        AppList.sort(addPromotedIntegrations(list),AppList.BY_APPNAME_IGNORE_CASE,AppList.IN_ASCENDING,integer1);
     }
 
     @Override
@@ -81,6 +83,27 @@ public class IntegrationsActivity extends Activity implements AppListener, SortL
         }
     }
 
+    private List<AppData> addPromotedIntegrations(List<AppData> list) {
+        generatePromotedIntegrations();
+        for (AppData promotedIntegration : promotedIntegrations) {
+            if (!list.contains(promotedIntegration)) {
+                list.add(promotedIntegration);
+            }
+        }
+        return list;
+    }
+
+    private void generatePromotedIntegrations() {
+        promotedIntegrations.clear();
+
+        AppData promotedIntegration = new AppData();
+        promotedIntegration.setIcon(getDrawable(R.drawable.ic_twelveish));
+        promotedIntegration.setPackageName("com.layoutxml.twelveish");
+        promotedIntegration.setName("Twelveish");
+        promotedIntegration.setObject(false); //false if app is not installed, null if it is
+        promotedIntegrations.add(promotedIntegration);
+    }
+
     public class IntegrationsAdapter extends RecyclerView.Adapter<IntegrationsAdapter.MyViewHolder>{
 
         private List<AppData> appDataList;
@@ -88,23 +111,32 @@ public class IntegrationsActivity extends Activity implements AppListener, SortL
         class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
             TextView name;
-            ImageView logo;
+            ImageView logo, download;
 
             MyViewHolder(View v) {
                 super(v);
                 v.setOnClickListener(this);
                 name = v.findViewById(R.id.itemName);
                 logo = v.findViewById(R.id.itemLogo);
+                download = v.findViewById(R.id.downloadIcon);
             }
 
             @Override
             public void onClick(View v) {
                 int position = getAdapterPosition(); // gets item position
-                Intent intent;
-                intent = new Intent(IntegrationsActivity.this, BooleanSwitchActivity.class);
-                intent.putExtra("Activity","ambient&interactive_modes");
-                intent.putExtra("Package",values.get(position).getPackageName());
-                IntegrationsActivity.this.startActivity(intent);
+                if (values.get(position).getObject()==null) {
+                    Intent intent;
+                    intent = new Intent(IntegrationsActivity.this, BooleanSwitchActivity.class);
+                    intent.putExtra("Activity", "ambient&interactive_modes");
+                    intent.putExtra("Package", values.get(position).getPackageName());
+                    IntegrationsActivity.this.startActivity(intent);
+                } else {
+                    try {
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + values.get(position).getPackageName())));
+                    } catch (android.content.ActivityNotFoundException e) {
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + values.get(position).getPackageName())));
+                    }
+                }
             }
         }
 
@@ -124,6 +156,9 @@ public class IntegrationsActivity extends Activity implements AppListener, SortL
             AppData app = appDataList.get(position);
             holder.name.setText(app.getName());
             holder.logo.setImageDrawable(app.getIcon());
+            if (app.getObject()==null) {
+                holder.download.setVisibility(View.GONE);
+            }
         }
 
         @Override
