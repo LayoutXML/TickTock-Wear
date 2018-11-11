@@ -1,4 +1,4 @@
-package com.layoutxml.tickingsound.activities;
+package com.rokasjankunas.ticktock.activities;
 
 import android.app.Activity;
 import android.content.Context;
@@ -16,8 +16,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.layoutxml.tickingsound.R;
-import com.layoutxml.tickingsound.objects.BooleanOption;
+import com.rokasjankunas.ticktock.objects.BooleanOption;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,12 +29,12 @@ public class BooleanSwitchActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        super.setTheme(R.style.MainStyle);
-        setContentView(R.layout.wearablerecyclerview_activity);
+        super.setTheme(com.rokasjankunas.ticktock.R.style.MainStyle);
+        setContentView(com.rokasjankunas.ticktock.R.layout.wearablerecyclerview_activity);
 
-        prefs = this.getSharedPreferences(getString(R.string.sharedPreferences), Context.MODE_PRIVATE);
+        prefs = this.getSharedPreferences(getString(com.rokasjankunas.ticktock.R.string.sharedPreferences), Context.MODE_PRIVATE);
 
-        WearableRecyclerView mWearableRecyclerView = findViewById(R.id.wearable_recycler_view);
+        WearableRecyclerView mWearableRecyclerView = findViewById(com.rokasjankunas.ticktock.R.id.wearable_recycler_view);
         mWearableRecyclerView.setLayoutManager(new WearableLinearLayoutManager(this));
         mWearableRecyclerView.setEdgeItemsCenteringEnabled(true);
 
@@ -52,13 +51,13 @@ public class BooleanSwitchActivity extends Activity {
     private void generateChargingValues(){
         BooleanOption option = new BooleanOption();
         option.setName("Play while charging");
-        option.setKey(getString(R.string.charging_preference));
+        option.setKey(getString(com.rokasjankunas.ticktock.R.string.charging_preference));
         option.setDefaultValue(true);
         values.add(option);
 
         option = new BooleanOption();
         option.setName("Play while not charging");
-        option.setKey(getString(R.string.notcharging_preference));
+        option.setKey(getString(com.rokasjankunas.ticktock.R.string.notcharging_preference));
         option.setDefaultValue(true);
         values.add(option);
 
@@ -68,13 +67,13 @@ public class BooleanSwitchActivity extends Activity {
     private void generateAmbientAndInteractiveModesValues(){
         BooleanOption option = new BooleanOption();
         option.setName("Play while in ambient mode");
-        option.setKey(getIntent().getStringExtra("Package")+"."+getString(R.string.ambient_preference));
+        option.setKey(getIntent().getStringExtra("Package")+"."+getString(com.rokasjankunas.ticktock.R.string.ambient_preference));
         option.setDefaultValue(true);
         values.add(option);
 
         option = new BooleanOption();
         option.setName("Play while in interactive mode");
-        option.setKey(getIntent().getStringExtra("Package")+"."+getString(R.string.interactive_preference));
+        option.setKey(getIntent().getStringExtra("Package")+"."+getString(com.rokasjankunas.ticktock.R.string.interactive_preference));
         option.setDefaultValue(true);
         values.add(option);
 
@@ -90,8 +89,8 @@ public class BooleanSwitchActivity extends Activity {
 
             MyViewHolder(View view) {
                 super(view);
-                name = view.findViewById(R.id.miscoptionsListTextView);
-                switcher = view.findViewById(R.id.miscoptionsListSwitch);
+                name = view.findViewById(com.rokasjankunas.ticktock.R.id.miscoptionsListTextView);
+                switcher = view.findViewById(com.rokasjankunas.ticktock.R.id.miscoptionsListSwitch);
 
                 view.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -111,7 +110,7 @@ public class BooleanSwitchActivity extends Activity {
         @NonNull
         @Override
         public MiscOptionsAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.switch_and_textview_item,parent,false);
+            View itemView = LayoutInflater.from(parent.getContext()).inflate(com.rokasjankunas.ticktock.R.layout.switch_and_textview_item,parent,false);
             return new MiscOptionsAdapter.MyViewHolder(itemView);
         }
 

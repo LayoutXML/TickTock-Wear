@@ -1,4 +1,4 @@
-package com.layoutxml.tickingsound;
+package com.rokasjankunas.ticktock;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -24,10 +24,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.layoutxml.tickingsound.activities.ActivityTextViewActivity;
-import com.layoutxml.tickingsound.activities.custom.AboutActivity;
-import com.layoutxml.tickingsound.activities.custom.IntegrationsActivity;
-import com.layoutxml.tickingsound.objects.ActivityOption;
+import com.rokasjankunas.ticktock.activities.ActivityTextViewActivity;
+import com.rokasjankunas.ticktock.activities.custom.AboutActivity;
+import com.rokasjankunas.ticktock.activities.custom.IntegrationsActivity;
+import com.rokasjankunas.ticktock.objects.ActivityOption;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,8 +68,8 @@ public class MainActivity extends WearableActivity {
     private Button volumeUp;
     private RecyclerView recyclerView;
     //Intent constants
-    private static final String TRANSITION_TO_AMBIENT_MODE = "com.layoutxml.tickingsound.TRANSITION_TO_AMBIENT_MODE";
-    private static final String TRANSITION_TO_INTERACTIVE_MODE = "com.layoutxml.tickingsound.TRANSITION_TO_INTERACTIVE_MODE";
+    private static final String TRANSITION_TO_AMBIENT_MODE = "com.rokasjankunas.ticktock.TRANSITION_TO_AMBIENT_MODE";
+    private static final String TRANSITION_TO_INTERACTIVE_MODE = "com.rokasjankunas.ticktock.TRANSITION_TO_INTERACTIVE_MODE";
 
     private BroadcastReceiver batteryBroadcastReceiver = new BroadcastReceiver(){
         @Override
@@ -80,7 +80,7 @@ public class MainActivity extends WearableActivity {
                     case TRANSITION_TO_AMBIENT_MODE:
                         senderPackage = intent.getStringExtra("package");
                         if (senderPackage==null)
-                            senderPackage="com.layoutxml.tickingsound";
+                            senderPackage="com.rokasjankunas.ticktock";
                         else
                             isInAmbient = true;
                         checkRestrictions();
@@ -88,7 +88,7 @@ public class MainActivity extends WearableActivity {
                     case TRANSITION_TO_INTERACTIVE_MODE:
                         senderPackage = intent.getStringExtra("package");
                         if (senderPackage==null)
-                            senderPackage="com.layoutxml.tickingsound";
+                            senderPackage="com.rokasjankunas.ticktock";
                         else
                             isInAmbient = false;
                         checkRestrictions();

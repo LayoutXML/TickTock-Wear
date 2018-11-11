@@ -1,4 +1,4 @@
-package com.layoutxml.tickingsound;
+package com.rokasjankunas.ticktock;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

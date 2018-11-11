@@ -1,4 +1,4 @@
-package com.layoutxml.tickingsound.activities;
+package com.rokasjankunas.ticktock.activities;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -14,9 +14,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.layoutxml.tickingsound.R;
-import com.layoutxml.tickingsound.activities.custom.BatteryPercentageActivity;
-import com.layoutxml.tickingsound.objects.ActivityOption;
+import com.rokasjankunas.ticktock.R;
+import com.rokasjankunas.ticktock.activities.custom.BatteryPercentageActivity;
+import com.rokasjankunas.ticktock.objects.ActivityOption;
 
 import java.util.ArrayList;
 import java.util.List;

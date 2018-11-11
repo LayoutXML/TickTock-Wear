@@ -1,4 +1,4 @@
-package com.layoutxml.tickingsound.activities.custom;
+package com.rokasjankunas.ticktock.activities.custom;
 
 import android.app.Activity;
 import android.content.Context;
@@ -8,7 +8,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-import com.layoutxml.tickingsound.R;
+
+import com.rokasjankunas.ticktock.R;
 
 public class BatteryPercentageActivity extends Activity {
 

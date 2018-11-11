@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="sharedPreferences">com.layoutxml.tickingsound</string>
+    <string name="sharedPreferences">com.rokasjankunas.ticktock</string>
     <string name="minBattery_preference">minBattery</string>
     <string name="maxBattery_preference">maxBattery</string>
     <string name="charging_preference">chargingPreference</string>

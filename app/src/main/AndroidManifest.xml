@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.layoutxml.tickingsound">
+    package="com.rokasjankunas.ticktock">
 
     <uses-feature android:name="android.hardware.type.watch" />
     <uses-feature android:name="android.hardware.audio.output" />
@@ -10,7 +10,7 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <permission
-        android:name="com.layoutxml.tickingsound.AMBIENT_INTERACTIVE_MODE_CHANGE"
+        android:name="com.rokasjankunas.ticktock.AMBIENT_INTERACTIVE_MODE_CHANGE"
         android:label="Pause or resume ticking sound (for ambient and interactive modes)"
         android:description="@string/permission_description_AMBIENT_INTERACTIVE"
         android:protectionLevel="dangerous"/>
@@ -30,21 +30,21 @@
             android:value="true" />
 
         <activity
-            android:name=".MainActivity"
+            android:name="com.rokasjankunas.ticktock.MainActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.ActivityTextViewActivity" />
-        <activity android:name=".activities.custom.BatteryPercentageActivity" />
-        <activity android:name=".activities.BooleanSwitchActivity" />
-        <activity android:name=".activities.custom.IntegrationsActivity" />
-        <activity android:name=".activities.custom.AboutActivity" />
+        <activity android:name="com.rokasjankunas.ticktock.activities.ActivityTextViewActivity" />
+        <activity android:name="com.rokasjankunas.ticktock.activities.custom.BatteryPercentageActivity" />
+        <activity android:name="com.rokasjankunas.ticktock.activities.BooleanSwitchActivity" />
+        <activity android:name="com.rokasjankunas.ticktock.activities.custom.IntegrationsActivity" />
+        <activity android:name="com.rokasjankunas.ticktock.activities.custom.AboutActivity" />
 
         <receiver
-            android:name=".BootReceiver"
+            android:name="com.rokasjankunas.ticktock.BootReceiver"
             android:label="Boot Receiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />

@@ -1,4 +1,4 @@
-package com.layoutxml.tickingsound.objects;
+package com.rokasjankunas.ticktock.objects;
 
 public class ActivityOption {
     private String name, extra;

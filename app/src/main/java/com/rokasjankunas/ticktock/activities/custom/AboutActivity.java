@@ -1,26 +1,25 @@
-package com.layoutxml.tickingsound.activities.custom;
+package com.rokasjankunas.ticktock.activities.custom;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.widget.TextView;
 
-import com.layoutxml.tickingsound.BuildConfig;
-import com.layoutxml.tickingsound.R;
+import com.rokasjankunas.ticktock.BuildConfig;
 
 public class AboutActivity extends Activity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.about_activity);
+        setContentView(com.rokasjankunas.ticktock.R.layout.about_activity);
 
         int versionCode = BuildConfig.VERSION_CODE;
         String versionName = BuildConfig.VERSION_NAME;
 
-        TextView License2 = findViewById(R.id.license2);
+        TextView License2 = findViewById(com.rokasjankunas.ticktock.R.id.license2);
         License2.setText("Version name: "+versionName);
 
-        TextView License3 = findViewById(R.id.license3);
+        TextView License3 = findViewById(com.rokasjankunas.ticktock.R.id.license3);
         License3.setText("Version code: "+versionCode);
     }
 }
