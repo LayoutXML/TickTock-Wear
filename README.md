@@ -51,7 +51,7 @@ You can now donate to me (LayouXML) on **[Google Play](https://play.google.com/s
 
 TickTock Wear versioning follows this scheme:
 
-* Version code: number of commits to this repository.
+* Version code: number of commits to the repository with the full code (including premium parts).
 
 * Version name: x.y.z, where z increases by 1 with at least one fix compared to the previous version, y increases by 1 with at least one new feature. y and x additionally increase by 1 if the number after it reaches 10. In that case the number that reaches 10 reverts back to 0.
 
@@ -70,6 +70,8 @@ Logo: [@elawhatson](https://github.com/elawhatson)
 TickTock Wear does not send any anonymous or personally identifiable information - TickTock Wear does not have an internet permission. TickTock Wear may locally store user preferences for 3rd party integrations. This information is not send anywhere else and may be deleted in the OS settings (by pressing "Clear data").
 
 ## License
+
+This application uses "Android In-App Billing v3" library by anjlab. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 or in the "LICENSE-ANDROID-IN-APP-BILLING-V3.txt" file.
 
 TickTock Wear is licensed under "MIT" license. Copyright laws apply.
 

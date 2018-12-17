@@ -24,7 +24,7 @@
                     android:id="@+id/license1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Made by LayoutXML"
+                    android:text="Made by Rokas Jankunas (LayoutXML)"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -55,7 +55,7 @@
                     android:id="@+id/license4"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Don't forget to rate the app!"
+                    android:text="This application uses \'Android In-App Billing v3' library by anjlab. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0\n\nDon't forget to rate the app!"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />
 
