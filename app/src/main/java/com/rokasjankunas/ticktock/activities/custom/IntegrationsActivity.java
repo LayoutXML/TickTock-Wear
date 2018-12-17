@@ -89,6 +89,9 @@ public class IntegrationsActivity extends Activity implements AppListener, SortL
                 list.add(promotedIntegration);
             }
         }
+        AppData self = new AppData();
+        self.setPackageName("com.rokasjankunas.ticktock");
+        list.remove(self);
         return list;
     }
 
