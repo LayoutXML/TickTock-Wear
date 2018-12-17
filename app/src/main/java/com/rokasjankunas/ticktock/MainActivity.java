@@ -76,28 +76,12 @@ public class MainActivity extends WearableActivity {
     private static final String TRANSITION_TO_AMBIENT_MODE = "com.rokasjankunas.ticktock.TRANSITION_TO_AMBIENT_MODE";
     private static final String TRANSITION_TO_INTERACTIVE_MODE = "com.rokasjankunas.ticktock.TRANSITION_TO_INTERACTIVE_MODE";
 
-    private BroadcastReceiver batteryBroadcastReceiver = new BroadcastReceiver(){
+    private BroadcastReceiver globalBroadcastReceiver = new BroadcastReceiver(){
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if (action!=null) {
                 switch (action) {
-                    case TRANSITION_TO_AMBIENT_MODE:
-                        senderPackage = intent.getStringExtra("package");
-                        if (senderPackage==null)
-                            senderPackage="com.rokasjankunas.ticktock";
-                        else
-                            isInAmbient = true;
-                        checkRestrictions();
-                        break;
-                    case TRANSITION_TO_INTERACTIVE_MODE:
-                        senderPackage = intent.getStringExtra("package");
-                        if (senderPackage==null)
-                            senderPackage="com.rokasjankunas.ticktock";
-                        else
-                            isInAmbient = false;
-                        checkRestrictions();
-                        break;
                     case Intent.ACTION_BATTERY_CHANGED:
                         currentBattery = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 100);
                         int pluggedIn = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1);
@@ -111,6 +95,33 @@ public class MainActivity extends WearableActivity {
                         checkRestrictions();
                         break;
                     case Intent.ACTION_TIME_TICK:
+                        checkRestrictions();
+                        break;
+                }
+            }
+        }
+    };
+
+    private BroadcastReceiver integrationBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action!=null) {
+                switch (action) {
+                    case TRANSITION_TO_AMBIENT_MODE:
+                        senderPackage = intent.getStringExtra("package");
+                        if (senderPackage == null)
+                            senderPackage = "com.rokasjankunas.ticktock";
+                        else
+                            isInAmbient = true;
+                        checkRestrictions();
+                        break;
+                    case TRANSITION_TO_INTERACTIVE_MODE:
+                        senderPackage = intent.getStringExtra("package");
+                        if (senderPackage == null)
+                            senderPackage = "com.rokasjankunas.ticktock";
+                        else
+                            isInAmbient = false;
                         checkRestrictions();
                         break;
                 }
@@ -191,14 +202,19 @@ public class MainActivity extends WearableActivity {
         });
 
         generateSettingsListValues();
+
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(Intent.ACTION_BATTERY_CHANGED);
-        intentFilter.addAction(TRANSITION_TO_AMBIENT_MODE);
-        intentFilter.addAction(TRANSITION_TO_INTERACTIVE_MODE);
         intentFilter.addAction(Intent.ACTION_TIME_TICK);
         intentFilter.addAction(Intent.ACTION_TIMEZONE_CHANGED);
         intentFilter.addAction(Intent.ACTION_TIME_CHANGED);
-        this.registerReceiver(this.batteryBroadcastReceiver,intentFilter);
+        this.registerReceiver(this.globalBroadcastReceiver,intentFilter);
+
+        IntentFilter intentFilter1 = new IntentFilter();
+        intentFilter1.addAction(TRANSITION_TO_AMBIENT_MODE);
+        intentFilter1.addAction(TRANSITION_TO_INTERACTIVE_MODE);
+        this.registerReceiver(this.integrationBroadcastReceiver,intentFilter1,"com.rokasjankunas.ticktock.AMBIENT_INTERACTIVE_MODE_CHANGE",null);
+
         pulsate();
     }
 
@@ -213,7 +229,7 @@ public class MainActivity extends WearableActivity {
         minMin = sharedPreferences.getInt(getString(R.string.minMin_preference), 0);
         minH = sharedPreferences.getInt(getString(R.string.minH_preference), 0);
         maxMin = sharedPreferences.getInt(getString(R.string.maxMin_preference), 0);
-        maxH = sharedPreferences.getInt(getString(R.string.maxH_preference), 0);
+        maxH = sharedPreferences.getInt(getString(R.string.maxH_preference), 24);
     }
 
     private void checkRestrictions() {
@@ -317,7 +333,8 @@ public class MainActivity extends WearableActivity {
     protected void onDestroy() {
         super.onDestroy();
         stopTicking(true,false);
-        unregisterReceiver(batteryBroadcastReceiver);
+        unregisterReceiver(globalBroadcastReceiver);
+        unregisterReceiver(integrationBroadcastReceiver);
     }
 
     private void stopTicking(Boolean forced, Boolean paused) {

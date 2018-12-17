@@ -35,7 +35,7 @@ public class TimeActivity extends Activity {
         minMin = sharedPreferences.getInt(getString(R.string.minMin_preference), 0);
         minH = sharedPreferences.getInt(getString(R.string.minH_preference), 0);
         maxMin = sharedPreferences.getInt(getString(R.string.maxMin_preference), 0);
-        maxH = sharedPreferences.getInt(getString(R.string.maxH_preference), 0);
+        maxH = sharedPreferences.getInt(getString(R.string.maxH_preference), 24);
         if (maxH==24) {
             maxH=0;
         }
