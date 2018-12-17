@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.rokasjankunas.ticktock.R;
 import com.rokasjankunas.ticktock.activities.custom.BatteryPercentageActivity;
+import com.rokasjankunas.ticktock.activities.custom.TimeActivity;
 import com.rokasjankunas.ticktock.objects.ActivityOption;
 
 import java.util.ArrayList;
@@ -56,6 +57,12 @@ public class ActivityTextViewActivity extends Activity {
         activityOption.setName("Charging");
         activityOption.setActivity(BooleanSwitchActivity.class);
         activityOption.setExtra("charging");
+        values.add(activityOption);
+
+        activityOption = new ActivityOption();
+        activityOption.setName("Time");
+        activityOption.setActivity(TimeActivity.class);
+        activityOption.setExtra("time");
         values.add(activityOption);
 
         mAdapter.notifyDataSetChanged();

@@ -42,6 +42,7 @@
         <activity android:name="com.rokasjankunas.ticktock.activities.BooleanSwitchActivity" />
         <activity android:name="com.rokasjankunas.ticktock.activities.custom.IntegrationsActivity" />
         <activity android:name="com.rokasjankunas.ticktock.activities.custom.AboutActivity" />
+        <activity android:name=".activities.custom.TimeActivity" />
 
         <receiver
             android:name="com.rokasjankunas.ticktock.BootReceiver"

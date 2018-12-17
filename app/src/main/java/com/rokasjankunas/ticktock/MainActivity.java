@@ -30,6 +30,7 @@ import com.rokasjankunas.ticktock.activities.custom.IntegrationsActivity;
 import com.rokasjankunas.ticktock.objects.ActivityOption;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class MainActivity extends WearableActivity {
@@ -60,6 +61,10 @@ public class MainActivity extends WearableActivity {
     private Boolean whileNotCharging;
     private Boolean whileInAmbient;
     private Boolean whileInInteractive;
+    private Integer minMin;
+    private Integer minH;
+    private Integer maxMin;
+    private Integer maxH;
     //Elements
     private Button button;
     private ImageView buttonIcon;
@@ -97,6 +102,15 @@ public class MainActivity extends WearableActivity {
                         currentBattery = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 100);
                         int pluggedIn = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1);
                         isCharging = pluggedIn == BatteryManager.BATTERY_PLUGGED_AC || pluggedIn == BatteryManager.BATTERY_PLUGGED_USB || pluggedIn == BatteryManager.BATTERY_PLUGGED_WIRELESS;
+                        checkRestrictions();
+                        break;
+                    case Intent.ACTION_TIME_CHANGED:
+                        checkRestrictions();
+                        break;
+                    case Intent.ACTION_TIMEZONE_CHANGED:
+                        checkRestrictions();
+                        break;
+                    case Intent.ACTION_TIME_TICK:
                         checkRestrictions();
                         break;
                 }
@@ -181,6 +195,9 @@ public class MainActivity extends WearableActivity {
         intentFilter.addAction(Intent.ACTION_BATTERY_CHANGED);
         intentFilter.addAction(TRANSITION_TO_AMBIENT_MODE);
         intentFilter.addAction(TRANSITION_TO_INTERACTIVE_MODE);
+        intentFilter.addAction(Intent.ACTION_TIME_TICK);
+        intentFilter.addAction(Intent.ACTION_TIMEZONE_CHANGED);
+        intentFilter.addAction(Intent.ACTION_TIME_CHANGED);
         this.registerReceiver(this.batteryBroadcastReceiver,intentFilter);
         pulsate();
     }
@@ -193,6 +210,10 @@ public class MainActivity extends WearableActivity {
         whileNotCharging = sharedPreferences.getBoolean(getString(R.string.notcharging_preference),true);
         whileInAmbient = sharedPreferences.getBoolean(senderPackage+"."+getString(R.string.ambient_preference),true);
         whileInInteractive = sharedPreferences.getBoolean(senderPackage+"."+getString(R.string.interactive_preference),true);
+        minMin = sharedPreferences.getInt(getString(R.string.minMin_preference), 0);
+        minH = sharedPreferences.getInt(getString(R.string.minH_preference), 0);
+        maxMin = sharedPreferences.getInt(getString(R.string.maxMin_preference), 0);
+        maxH = sharedPreferences.getInt(getString(R.string.maxH_preference), 0);
     }
 
     private void checkRestrictions() {
@@ -214,6 +235,20 @@ public class MainActivity extends WearableActivity {
             } else {
                 if (!whileInInteractive)
                     isRestricted = true;
+            }
+        }
+        if (!isRestricted) {
+            Calendar calendar = Calendar.getInstance();
+            int currentH = calendar.get(Calendar.HOUR_OF_DAY);
+            int currentMin = calendar.get(Calendar.MINUTE);
+            if (currentH > maxH || currentH < minH) {
+                isRestricted = true;
+            }
+            else if (currentH==minH && currentMin < minMin) {
+                isRestricted = true;
+            }
+            else if (currentH==maxH && currentMin >= maxMin) {
+                isRestricted = true;
             }
         }
 
