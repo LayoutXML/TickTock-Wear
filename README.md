@@ -1,6 +1,6 @@
 # TickTock Wear
 
-<description>
+TickTock wear is a semi-open source Wear OS (Android Wear) application that adds a ticking sound to your Android smart watch. You can add time, battery percentage, and charging status restrictions. Premium users can also change the ticking sound and enable hourly chime.
 
 <url>
 
@@ -41,8 +41,37 @@ You can install TickTock Wear directly from your computer. Method below describe
 
 ## For Developers
 
-<add instructions on what can be done and how>
-<permissions>
+Developers can easily integrate their existing Wear OS (Android Wear) watch faces with TickTock Wear to provide more functionality. Currently watch faces are allowed to send broadcasts when the ambient mode changes. Depending on user settings, TickTock Wear then may pause ticking on ambient or active modes.
+
+To integrate your watch face:
+
+1. Paste these lines to the top of your watch face class(-es):
+```
+private static final String TRANSITION_TO_AMBIENT_MODE = "com.rokasjankunas.ticktock.TRANSITION_TO_AMBIENT_MODE";
+private static final String TRANSITION_TO_INTERACTIVE_MODE = "com.rokasjankunas.ticktock.TRANSITION_TO_INTERACTIVE_MODE";
+```
+
+2. In `onAmbientModeChanged(boolean inAmbientMode)` method(s) add these lines:
+```
+if (inAmbientMode) {
+    Intent intent = new Intent();
+    intent.setAction(TRANSITION_TO_AMBIENT_MODE);
+    intent.putExtra("package", getPackageName());
+    sendBroadcast(intent, "com.rokasjankunas.ticktock.AMBIENT_INTERACTIVE_MODE_CHANGE");
+} else {
+    Intent intent = new Intent();
+    intent.setAction(TRANSITION_TO_INTERACTIVE_MODE);
+    intent.putExtra("package", getPackageName());
+    sendBroadcast(intent, "com.rokasjankunas.ticktock.AMBIENT_INTERACTIVE_MODE_CHANGE");
+}
+```
+
+3. To your AndroidManifest.xml file add this permission:
+```
+<uses-permission android:name="com.rokasjankunas.ticktock.AMBIENT_INTERACTIVE_MODE_CHANGE"/>
+```
+
+By integrating your watch face with the TickTock Wear application you agree with [these terms](https://github.com/LayoutXML/TickTock-Wear/blob/master/developer-terms.md).
 
 ## Donate
 You can now donate to me (LayouXML) on **[Google Play](https://play.google.com/store/apps/details?id=com.layoutxml.support)** or **[PayPal](https://www.paypal.me/RJankunas)**.
@@ -73,6 +102,6 @@ TickTock Wear does not send any anonymous or personally identifiable information
 
 This application uses "Android In-App Billing v3" library by anjlab. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 or in the "LICENSE-ANDROID-IN-APP-BILLING-V3.txt" file.
 
-TickTock Wear is licensed under "MIT" license. Copyright laws apply.
+Copyright laws apply.
 
 Copyright © 2018 Rokas Jankūnas (LayoutXML)
