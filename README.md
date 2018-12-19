@@ -71,7 +71,7 @@ if (inAmbientMode) {
 <uses-permission android:name="com.rokasjankunas.ticktock.AMBIENT_INTERACTIVE_MODE_CHANGE"/>
 ```
 
-By integrating your watch face with the TickTock Wear application you agree with [these terms](https://github.com/LayoutXML/TickTock-Wear/blob/master/developer-terms.md).
+By integrating your Wear OS (or Android Wear) application (or watch face) to include `com.rokasjankunas.ticktock.AMBIENT_INTERACTIVE_MODE_CHANGE` permission and/or send broadcasts to TickTock Wear application (package name `com.rokasjankunas.ticktock`) and/or interfere with the work of TickTock Wear application in other way, you agree to [these terms](https://github.com/LayoutXML/TickTock-Wear/blob/master/developer-terms.md).
 
 ## Donate
 You can now donate to me (LayouXML) on **[Google Play](https://play.google.com/store/apps/details?id=com.layoutxml.support)** or **[PayPal](https://www.paypal.me/RJankunas)**.
