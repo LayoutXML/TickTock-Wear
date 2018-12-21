@@ -1,6 +1,6 @@
 # TickTock Wear
 
-TickTock wear is a semi-open source Wear OS (Android Wear) application that adds a ticking sound to your Android smart watch. You can add time, battery percentage, and charging status restrictions. Premium users can also change the ticking sound and enable hourly chime.
+TickTock wear is a semi-open source Wear OS (Android Wear) application that adds a ticking sound to your Android smart watch. Add time, battery percentage, and charging status restrictions. Premium users can also change the ticking sound and enable hourly chime.
 
 <url>
 
