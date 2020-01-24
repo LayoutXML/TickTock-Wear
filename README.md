@@ -2,9 +2,9 @@
 
 TickTock wear is a semi-open source Wear OS (Android Wear) application that adds a ticking sound to your Android smart watch. Add time, battery percentage, and charging status restrictions. Premium users can also change the ticking sound and enable hourly chime.
 
-<url>
+## Foreword
 
-<screenshots>
+Project was started before learning any best practises or gaining experiance through work or studies and was intended to gain this experience. There are many things I would change and refactor if I were to start this project again. For now, it stays as a reminder of where it all started.
 
 ## Table of Contents
 <change to URLS>
@@ -13,12 +13,11 @@ TickTock wear is a semi-open source Wear OS (Android Wear) application that adds
     1. Prerequisites
     2. Installing
 2. For Developers
-3. Donate
-4. Versioning
-5. Author
-6. Acknowledgments
-7. Privacy Policy
-8. License
+3. Versioning
+4. Author
+5. Acknowledgments
+6. Privacy Policy
+7. License
 
 ## Installation
 
@@ -72,9 +71,6 @@ if (inAmbientMode) {
 ```
 
 By integrating your Wear OS (or Android Wear) application (or watch face) to include `com.rokasjankunas.ticktock.AMBIENT_INTERACTIVE_MODE_CHANGE` permission and/or send broadcasts to TickTock Wear application (package name `com.rokasjankunas.ticktock`) and/or interfere with the work of TickTock Wear application in other way, you agree to [these terms](https://github.com/LayoutXML/TickTock-Wear/blob/master/developer-terms.md).
-
-## Donate
-You can now donate to me (LayouXML) on **[Google Play](https://play.google.com/store/apps/details?id=com.layoutxml.support)** or **[PayPal](https://www.paypal.me/RJankunas)**.
 
 ## Versioning
 
